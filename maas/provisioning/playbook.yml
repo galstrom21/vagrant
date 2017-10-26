@@ -1,0 +1,7 @@
+---
+- hosts: all
+  tasks:
+  - include_role:
+       name: ansible-maas
+       tasks_from: main
+
