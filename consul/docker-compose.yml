@@ -1,0 +1,44 @@
+version: '3'
+services:
+  server-node01:
+    # network_mode: "host"
+    networks:
+      consul_net:
+        ipv4_address: 172.22.0.10
+    image: 'consul'
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"server": true, "bootstrap_expect": 3}'
+      CONSUL_CLIENT_INTERFACE: 'eth0'
+      CONSUL_BIND_INTERFACE: 'eth0'
+    command: ["agent", "-server"]
+  server-node02:
+    # network_mode: "host"
+    networks:
+      consul_net:
+        ipv4_address: 172.22.0.11
+    image: 'consul'
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"server": true, "bootstrap_expect": 3, "start_join": ["172.22.0.10", "172.22.0.11", "172.22.0.12"]}'
+      CONSUL_CLIENT_INTERFACE: 'eth0'
+      CONSUL_BIND_INTERFACE: 'eth0'
+    command: ["agent", "-server"]
+  server-node03:
+    # network_mode: "host"
+    networks:
+      consul_net:
+        ipv4_address: 172.22.0.12
+    image: 'consul'
+    environment:
+      CONSUL_LOCAL_CONFIG: '{"server": true, "bootstrap_expect": 3, "start_join": ["172.22.0.10", "172.22.0.11", "172.22.0.12"]}'
+      CONSUL_CLIENT_INTERFACE: 'eth0'
+      CONSUL_BIND_INTERFACE: 'eth0'
+    command: ["agent", "-server"]
+
+networks:
+  consul_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      -
+        subnet: 172.22.0.0/24
