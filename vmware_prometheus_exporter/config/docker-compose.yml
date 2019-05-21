@@ -1,0 +1,23 @@
+version: '3'
+services:
+  exporter:
+    ports:
+      - "9272:9272"
+    image: 'pryorda/vmware_exporter'
+    volumes:
+      - /vagrant_data:/tmp
+    command: ["-c", "/tmp/config.yml"]
+  prometheus:
+    ports:
+      - "9090:9090"
+    image: "prom/prometheus"
+    links:
+      - exporter
+    volumes:
+      - /vagrant_data/prometheus.yml:/etc/prometheus/prometheus.yml
+  grafana:
+    ports:
+      - "3000:3000"
+    image: 'grafana/grafana'
+    links:
+      - prometheus
