@@ -2,11 +2,15 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "perk/ubuntu-2204-arm64"
-  # config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder ".", "/vagrant", disabled: false
+  # config.vm.box = "perk/ubuntu-2204-arm64"
+  config.vm.box = "boxen/ubuntu-22.04-x86_64"
+
   config.vm.provider "qemu" do |qe|
     qe.qemu_dir = "/opt/local/share/qemu"
+    qe.arch = "x86_64"
+    qe.machine = "q35"
+    qe.cpu = "qemu64"
+    qe.net_device = "virtio-net-pci"
   end
 
   # NOTE: Documentation for the qemu provider is available at
