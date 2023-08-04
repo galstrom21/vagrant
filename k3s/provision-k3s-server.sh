@@ -33,6 +33,12 @@ sudo sh -c 'kubectl completion bash >/usr/share/bash-completion/completions/kube
 # find it without exporting the KUBECONFIG environment variable.
 ln -s /etc/rancher/k3s/k3s.yaml ~/.kube/config
 
+# setup vagrant user .kube/config
+mkdir /home/vagrant/.kube
+cp /etc/rancher/k3s/k3s.yaml /home/vagrant/.kube/config
+chmod 600 /home/vagrant/.kube/config
+chown -R vagrant:vagrant /home/vagrant/.kube
+
 # show cluster-info.
 kubectl cluster-info
 
