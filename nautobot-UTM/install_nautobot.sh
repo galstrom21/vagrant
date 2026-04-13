@@ -2,23 +2,6 @@
 
 set -xe
 
-sudo DEBIAN_FRONTEND=noninteractive apt update -y
-sudo DEBIAN_FRONTEND=noninteractive apt install -y git python3 python3-pip python3-venv python3-dev redis-server
-
-sudo DEBIAN_FRONTEND=noninteractive apt install -y libmysqlclient-dev mysql-server pkg-config
-
-# Create Nautobot Database
-echo "INSTALL | Create nautobot database"
-DB_PASSWD="secrete"
-sudo mysql -e "CREATE DATABASE IF NOT EXISTS nautobot;"
-echo "INSTALL | Create nautobot user"
-sudo mysql -e "CREATE USER IF NOT EXISTS'nautobot'@'localhost' IDENTIFIED BY '${DB_PASSWD}';"
-sudo mysql -e "GRANT ALL PRIVILEGES ON nautobot.* to 'nautobot'@'localhost';"
-
-# Verify Redis is running
-echo "INSTALL | Verify redis is available"
-redis-cli ping
-
 # Create the Nautobot System User
 if ! id nautobot &>/dev/null; then
   sudo useradd --system --shell /bin/bash --create-home --home-dir /opt/nautobot nautobot
@@ -69,7 +52,7 @@ sudo -iu nautobot NAUTOBOT_ROOT=/opt/nautobot nautobot-server shell <<EOF
 from django.contrib.auth import get_user_model
 User = get_user_model()
 if not User.objects.filter(username='admin').exists():
-    User.objects.create_superuser('admin', 'admin@example.com', 'password!234')
+    User.objects.create_superuser('admin', 'admin@example.com', 'Password!234')
 EOF
 
 sudo -iu nautobot NAUTOBOT_ROOT=/opt/nautobot nautobot-server collectstatic --no-input
